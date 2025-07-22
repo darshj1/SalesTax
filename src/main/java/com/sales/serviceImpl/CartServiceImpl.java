@@ -28,7 +28,6 @@ public class CartServiceImpl implements CartService {
                 .map(item ->{
                     Double tax = taxCalculatorService.calculateTax(item);
                     Double totalPrice = item.getPrice()+tax;
-                    System.out.println("Item : "+item.getPrice()+" "+tax+" "+totalPrice);
                     return new ReceiptItem(item,roundOff(item.getQuantity()*totalPrice),roundOff(item.getQuantity()*tax));
                 }).toList();
     }

@@ -23,36 +23,39 @@ public class SalesTaxApplication {
 	ReceiptService receiptService;
 
 	public static void main(String[] args) {
-		var context = SpringApplication.run(SalesTaxApplication.class, args);
-
-		SalesTaxApplication app = context.getBean(SalesTaxApplication.class);
-		app.getDetails();
+		getDetails();
 	}
 
-	public void getDetails(){
+	public static void getDetails(){
 		try (Scanner scanner = new Scanner(System.in)) {
 			System.out.println("Enter items (e.g., '1 imported bottle of perfume at 27.99'), one per line:");
 			System.out.println("Enter an empty line to finish input.\n");
 
-			//Reading All Inputs
-			while (true) {
-				String line = scanner.nextLine().trim();
-				if (line.isEmpty()) break;
-
-				try {
-					Item item = parseItem(line);
-					//Parsing Input and storing it into ITEM Object
-					cartService.addItem(item);
-				} catch (IllegalArgumentException e) {
-					System.out.println("Invalid input format. Please try again.");
-				}
-			}
-
-			//Printing Receipt after Tax Calculation
-			System.out.println("\nReceipt:");
-			List<ReceiptItem> receiptItemList = cartService.checkout();
-			receiptService.printReceipt(receiptItemList);
+			var context = SpringApplication.run(SalesTaxApplication.class);
+			SalesTaxApplication app = context.getBean(SalesTaxApplication.class);
+			app.getInputsFromUser(scanner);
 		}
+	}
+
+	public void getInputsFromUser(Scanner scanner){
+		//Reading All Inputs
+		while (true) {
+			String line = scanner.nextLine().trim();
+			if (line.isEmpty()) break;
+
+			try {
+				Item item = parseItem(line);
+				//Parsing Input and storing it into ITEM Object
+				cartService.addItem(item);
+			} catch (IllegalArgumentException e) {
+				System.out.println("Invalid input format. Please try again.");
+			}
+		}
+
+		//Printing Receipt after Tax Calculation
+		System.out.println("\nReceipt:");
+		List<ReceiptItem> receiptItemList = cartService.checkout();
+		receiptService.printReceipt(receiptItemList);
 	}
 
 	// Parses lines like: "1 imported box of chocolates at 10.00"
