@@ -41,7 +41,6 @@ class TaxCalculateServiceImplTests {
     @Test
     void testCalculateTax_TaxableAndImported() {
         Item item = new Item("imported perfume", 47.50, 1, true, false); // taxable + imported
-        double expectedTax = 47.50 * (0.10 + 0.05); // 15% total
-        assertEquals(expectedTax, taxCalculatorService.calculateTax(item), 0.001);
+        assertEquals(7.15, taxCalculatorService.calculateTax(item), 0.001);
     }
 }

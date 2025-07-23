@@ -19,6 +19,9 @@ public class TaxCalculatorServiceImpl implements TaxCalculatorService {
         if(item.getImported()){
             tax  = tax+(item.getPrice()*IMPORT_DUTY_RATE);
         }
-        return tax;
+        return roundOff(tax);
+    }
+    private Double roundOff(double value) {
+        return Math.ceil(value * 20.0) / 20.0;
     }
 }
